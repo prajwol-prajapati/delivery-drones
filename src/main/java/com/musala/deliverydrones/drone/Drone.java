@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.musala.deliverydrones.AuditModel;
 import com.musala.deliverydrones.medication.Medication;
 
 import lombok.Getter;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Drone {
+public class Drone extends AuditModel{
     @Id
     @GeneratedValue
     private Long id;
