@@ -8,12 +8,13 @@ public class MedicationService {
     @Autowired
     private MedicationRepository medicationRepository;
 
-    private final MedicationMapper medicationMapper;
+    @Autowired
+    private MedicationMapper medicationMapper;
 
     public Medication saveMedication(MedicationDto medicationRequest) {
         Medication medication = medicationMapper.mapToMedication(medicationRequest);
 
-        return medicationRepository.save(medication);
+        return medicationRepository.save(new Medication());
     }
-    
+
 }

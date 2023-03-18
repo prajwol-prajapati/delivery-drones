@@ -1,6 +1,9 @@
 package com.musala.deliverydrones.drone;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,24 +12,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.musala.deliverydrones.ListResponse;
 import com.musala.deliverydrones.medication.MedicationDto;
 
-import jakarta.websocket.server.PathParam;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("drones")
+@Slf4j
+@Validated
 public class DroneController {
     @Autowired
     private DroneService droneService;
 
     @PostMapping
-    public Drone registerDrone(Drone drone) {
+    public Drone registerDrone(@Valid @RequestBody DroneDto drone) {
+
         return droneService.registerDrone(drone);
     }
 
     @GetMapping
-    public ListResponse<Drone> getAllDrones() {
+    public List<Drone> getAllDrones() {
         return droneService.getAllDrones();
     }
 

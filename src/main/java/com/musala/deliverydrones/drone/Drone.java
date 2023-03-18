@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Drone extends AuditModel{
+public class Drone{
     @Id
     @GeneratedValue
     private Long id;
@@ -36,9 +36,17 @@ public class Drone extends AuditModel{
 
     @Column
     private State state;
-    
+
     @OneToMany
     // @JoinColumn(name="drone_id")
     // @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Medication> medications;
+
+    public List<Medication> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(List<Medication> medications) {
+        this.medications = medications;
+    }
 }
