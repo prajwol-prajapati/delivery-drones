@@ -2,7 +2,6 @@ package com.musala.deliverydrones.drone;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,13 +30,15 @@ public class DroneController {
         return droneService.registerDrone(drone);
     }
 
-    @GetMapping
-    public List<Drone> getAllDrones() {
-        return droneService.getAllDrones();
-    }
-
     @PatchMapping("/{droneId}")
     public Drone loadMedication(@PathVariable Long droneId, @RequestBody MedicationDto medication) {
         return droneService.loadMedication(droneId, medication);
     }
+
+    @GetMapping
+    public List<Drone> getAvailableDrones() {
+        return droneService.getAvailableDrones();
+    }
+
+
 }

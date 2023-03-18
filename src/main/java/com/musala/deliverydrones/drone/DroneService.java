@@ -1,6 +1,7 @@
 package com.musala.deliverydrones.drone;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,15 +24,18 @@ public class DroneService {
     @Autowired
     private DroneMapper droneMapper;
 
+    private final int minLoadableBattery = 25;
+
+    List<State> loadableStates = List.of(State.IDLE, State.LOADING, State.LOADED);
+
     public Drone registerDrone(DroneDto droneDto) {
         Drone drone = droneMapper.mapToDrone(droneDto);
 
         return droneRepository.save(drone);
     }
 
-    public List<Drone> getAllDrones() {
-
-        return droneRepository.findAll();
+    public List<Drone> getAvailableDrones() {
+        return droneRepository.findAllByStateAndBatteryGreaterThan(State.IDLE, minLoadableBattery);
     }
 
     @Transactional
