@@ -1,6 +1,9 @@
 package com.musala.deliverydrones.drone;
 
 import com.musala.deliverydrones.MessageConstants;
+import com.musala.deliverydrones.drone.battery.Battery;
+import com.musala.deliverydrones.drone.battery.BatteryDto;
+import com.musala.deliverydrones.drone.battery.BatteryService;
 import com.musala.deliverydrones.medication.Medication;
 import com.musala.deliverydrones.medication.MedicationDto;
 import com.musala.deliverydrones.medication.MedicationService;
@@ -22,10 +25,13 @@ public class DroneService {
     @Autowired
     private DroneMapper droneMapper;
 
+    @Autowired
+    private BatteryService batteryService;
+
     private final int minLoadableBattery = 25;
 
-    public Drone registerDrone(DroneDto droneDto) {
-        Drone drone = droneMapper.mapToDrone(droneDto);
+    public Drone registerDrone(DroneRequestDto droneRequestDto) {
+        Drone drone = droneMapper.mapToDrone(droneRequestDto);
 
         return droneRepository.save(drone);
     }
@@ -36,8 +42,8 @@ public class DroneService {
 
     @Transactional
     public Drone loadMedication(Long droneId, MedicationDto medication) {
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
         Medication savedMedication = medicationService.saveMedication(medication);
-        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException("Bad request"));
 
         validateMedicationLoad(drone, medication);
 
@@ -73,5 +79,17 @@ public class DroneService {
         Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
 
         return drone;
+    }
+
+    @Transactional
+    public Battery updateBatteryInfo(Long droneId, BatteryDto batteryInfo) {
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
+        Battery savedBatteryInfo = batteryService.save(batteryInfo);
+
+        drone.setBattery(batteryInfo.getPercentage());
+        drone.getBatteryHistory().add(savedBatteryInfo);
+        droneRepository.save(drone);
+
+        return savedBatteryInfo;
     }
 }

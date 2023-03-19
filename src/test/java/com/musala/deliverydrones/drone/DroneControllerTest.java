@@ -1,13 +1,9 @@
 package com.musala.deliverydrones.drone;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DroneControllerTest {
@@ -17,7 +13,7 @@ class DroneControllerTest {
 
     @Test
     void registerDrone() {
-        DroneDto drone = new DroneDto();
+        DroneRequestDto drone = new DroneRequestDto();
         drone.setBattery(20);
         drone.setModel("CRUISER_WEIGHT");
         drone.setSerialNumber("dhjjj1");

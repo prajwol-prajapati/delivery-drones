@@ -1,9 +1,9 @@
-package com.musala.deliverydrones.drone;
+package com.musala.deliverydrones.drone.battery;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
-public interface DroneMapper {
-    Drone mapToDrone(DroneRequestDto droneRequestDto);
+public interface BatteryMapper {
+    Battery mapToBattery(BatteryDto batteryDto);
 }
