@@ -57,5 +57,9 @@ public class DroneService {
         if (drone.getWeightLimit() < medication.getWeight()) {
             throw new RuntimeException(MessageConstants.ErrorMessages.WEIGHT_LIMIT_EXCEED);
         }
+
+        if (drone.getBattery() < minLoadableBattery) {
+            throw new RuntimeException(MessageConstants.ErrorMessages.BATTERY_LOW_FOR_LOADING);
+        }
     }
 }
