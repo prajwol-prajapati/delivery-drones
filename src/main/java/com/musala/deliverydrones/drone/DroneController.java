@@ -1,5 +1,6 @@
 package com.musala.deliverydrones.drone;
 
+import com.musala.deliverydrones.medication.Medication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,5 +41,13 @@ public class DroneController {
         return droneService.getAvailableDrones();
     }
 
+    @GetMapping("/{droneId}/medications")
+    public List<Medication> getDroneMedication(@PathVariable Long droneId) {
+        return droneService.getDroneMedication(droneId);
+    }
 
+    @GetMapping("/{droneId}")
+    public Drone getAvailableDrones(@PathVariable Long droneId) {
+        return droneService.getDrone(droneId);
+    }
 }

@@ -65,6 +65,13 @@ public class DroneService {
 
     public List<Medication> getDroneMedication(Long droneId) {
         Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
+
         return drone.getMedications();
+    }
+
+    public Drone getDrone(Long droneId) {
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
+
+        return drone;
     }
 }
