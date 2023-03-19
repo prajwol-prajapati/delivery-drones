@@ -30,14 +30,17 @@ public class DroneService {
 
     private final int minLoadableBattery = 25;
 
-    public Drone registerDrone(DroneRequestDto droneRequestDto) {
+    public DroneResponseDto registerDrone(DroneRequestDto droneRequestDto) {
         Drone drone = droneMapper.mapToDrone(droneRequestDto);
+        Drone savedDrone = droneRepository.save(drone);
 
-        return droneRepository.save(drone);
+        return droneMapper.mapToDroneResponse(savedDrone);
     }
 
-    public List<Drone> getAvailableDrones() {
-        return droneRepository.findAllByStateAndBatteryGreaterThan(State.IDLE, minLoadableBattery);
+    public List<DroneResponseDto> getAvailableDrones() {
+        List<Drone> availableDrones = droneRepository.findAllByStateAndBatteryGreaterThan(State.IDLE, minLoadableBattery);
+
+        return droneMapper.mapToDronesResponse(availableDrones);
     }
 
     @Transactional

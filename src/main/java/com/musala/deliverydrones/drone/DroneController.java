@@ -27,7 +27,7 @@ public class DroneController {
     private DroneService droneService;
 
     @PostMapping
-    public Drone registerDrone(@Valid @RequestBody DroneRequestDto drone) {
+    public DroneResponseDto registerDrone(@Valid @RequestBody DroneRequestDto drone) {
 
         return droneService.registerDrone(drone);
     }
@@ -38,7 +38,7 @@ public class DroneController {
     }
 
     @GetMapping
-    public List<Drone> getAvailableDrones() {
+    public List<DroneResponseDto> getAvailableDrones() {
         return droneService.getAvailableDrones();
     }
 

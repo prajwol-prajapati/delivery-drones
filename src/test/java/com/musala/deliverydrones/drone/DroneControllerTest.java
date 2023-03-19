@@ -20,9 +20,8 @@ class DroneControllerTest {
         drone.setState(State.DELIVERED.toString());
         drone.setWeightLimit(200.00);
 
-        Drone drone1 = droneController.registerDrone(drone);
+        DroneResponseDto drone1 = droneController.registerDrone(drone);
 
-        Assertions.assertNotNull(drone1.getId());
         Assertions.assertEquals(20, drone1.getBattery());
 
     }
