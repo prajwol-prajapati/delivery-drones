@@ -30,6 +30,10 @@ public class DroneService {
 
     private final int minLoadableBattery = 25;
 
+    private final int minBatteryPercentage = 0;
+
+    private final int maxBatteryPercentage = 100;
+
     public DroneResponseDto registerDrone(DroneRequestDto droneRequestDto) {
         Drone drone = droneMapper.mapToDrone(droneRequestDto);
         Drone savedDrone = droneRepository.save(drone);
@@ -94,5 +98,9 @@ public class DroneService {
         droneRepository.save(drone);
 
         return savedBatteryInfo;
+    }
+
+    public List<Drone> getAllActiveDrones () {
+        return droneRepository.findAllByBatteryGreaterThan(minBatteryPercentage);
     }
 }
