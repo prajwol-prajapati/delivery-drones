@@ -35,6 +35,9 @@ public class DroneService {
     private final int maxBatteryPercentage = 100;
 
     public DroneResponseDto registerDrone(DroneRequestDto droneRequestDto) {
+        if(droneRequestDto.getBattery() > maxBatteryPercentage || droneRequestDto.getBattery() < minBatteryPercentage) {
+            throw new RuntimeException(MessageConstants.ErrorMessages.INVALID_BATTERY_PERCENTAGE);
+        }
         Drone drone = droneMapper.mapToDrone(droneRequestDto);
         Drone savedDrone = droneRepository.save(drone);
 
@@ -90,6 +93,9 @@ public class DroneService {
 
     @Transactional
     public Battery updateBatteryInfo(Long droneId, BatteryDto batteryInfo) {
+        if(batteryInfo.getPercentage() > maxBatteryPercentage || batteryInfo.getPercentage() < minBatteryPercentage) {
+            throw new RuntimeException(MessageConstants.ErrorMessages.INVALID_BATTERY_PERCENTAGE);
+        }
         Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
         Battery savedBatteryInfo = batteryService.save(batteryInfo);
 
