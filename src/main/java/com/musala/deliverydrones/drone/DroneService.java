@@ -26,8 +26,6 @@ public class DroneService {
 
     private final int minLoadableBattery = 25;
 
-    List<State> loadableStates = List.of(State.IDLE, State.LOADING, State.LOADED);
-
     public Drone registerDrone(DroneDto droneDto) {
         Drone drone = droneMapper.mapToDrone(droneDto);
 

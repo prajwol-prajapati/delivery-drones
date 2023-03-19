@@ -5,5 +5,5 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface DroneMapper {
-    Drone mapToDrone(DroneDto droneDt);
+    Drone mapToDrone(DroneDto droneDto);
 }
