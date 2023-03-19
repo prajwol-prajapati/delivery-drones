@@ -30,7 +30,7 @@ public class DroneController {
         return droneService.registerDrone(drone);
     }
 
-    @PatchMapping("/{droneId}")
+    @PatchMapping("/{droneId}/load-medication")
     public Drone loadMedication(@PathVariable Long droneId, @RequestBody MedicationDto medication) {
         return droneService.loadMedication(droneId, medication);
     }

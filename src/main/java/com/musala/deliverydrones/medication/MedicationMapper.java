@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface MedicationMapper {
-    Medication mapToMedication(MedicationDto medicationDt);
+    Medication mapToMedication(MedicationDto medicationDto);
 }

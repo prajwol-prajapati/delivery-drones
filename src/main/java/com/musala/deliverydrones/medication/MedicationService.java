@@ -14,7 +14,7 @@ public class MedicationService {
     public Medication saveMedication(MedicationDto medicationRequest) {
         Medication medication = medicationMapper.mapToMedication(medicationRequest);
 
-        return medicationRepository.save(new Medication());
+        return medicationRepository.save(medication);
     }
 
 }

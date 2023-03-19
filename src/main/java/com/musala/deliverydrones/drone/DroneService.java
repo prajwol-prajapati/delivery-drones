@@ -1,16 +1,14 @@
 package com.musala.deliverydrones.drone;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.musala.deliverydrones.MessageConstants;
 import com.musala.deliverydrones.medication.Medication;
 import com.musala.deliverydrones.medication.MedicationDto;
 import com.musala.deliverydrones.medication.MedicationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
@@ -37,15 +35,27 @@ public class DroneService {
     }
 
     @Transactional
-	public Drone loadMedication(Long droneId, MedicationDto medication) {
+    public Drone loadMedication(Long droneId, MedicationDto medication) {
         Medication savedMedication = medicationService.saveMedication(medication);
-        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException());
-        // if(can load medication then add the medication)
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException("Bad request"));
+
+        validateMedicationLoad(drone, medication);
+
+        drone.setState(State.LOADING);
         drone.getMedications().add(savedMedication);
+        drone.setState(State.LOADED);
         droneRepository.save(drone);
-        // drone.setMedications(loadedMedications);
 
-		return drone;
-	}
+        return drone;
+    }
 
+    private void validateMedicationLoad(Drone drone, MedicationDto medication) {
+        if (!State.IDLE.equals(drone.getState())) {
+            throw new RuntimeException(MessageConstants.ErrorMessages.INVALID_LOADING_STATE);
+        }
+
+        if (drone.getWeightLimit() < medication.getWeight()) {
+            throw new RuntimeException(MessageConstants.ErrorMessages.WEIGHT_LIMIT_EXCEED);
+        }
+    }
 }
