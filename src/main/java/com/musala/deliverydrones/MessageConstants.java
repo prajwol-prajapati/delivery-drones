@@ -16,5 +16,9 @@ public interface MessageConstants {
     }
 
     interface ValidationMessages {
+        String MODEL_DOESNT_EXIST = "Incompatible drone model.";
+        String INVALID_STATE = "Invalid state provided.";
+        String INVALID_MEDICATION_NAME = "Invalid medication name, only letters, numbers, ‘-‘, ‘_’ allowed.";
+        String INVALID_MEDICATION_CODE = "Invalid medication name, only upper case letters, underscore and numbers allowed.";
     }
 }

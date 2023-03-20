@@ -33,7 +33,7 @@ public class DroneController {
     }
 
     @PatchMapping("/{droneId}/load-medication")
-    public Drone loadMedication(@PathVariable Long droneId, @RequestBody MedicationDto medication) {
+    public Drone loadMedication(@PathVariable Long droneId, @Valid @RequestBody MedicationDto medication) {
         return droneService.loadMedication(droneId, medication);
     }
 
