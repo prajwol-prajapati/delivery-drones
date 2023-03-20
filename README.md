@@ -13,6 +13,13 @@ For building and running the application you need:
 - [Maven 3](https://maven.apache.org)
 
 ## Setting up the application locally
+Copy application.properties.example and rename it as application.properties. Then run following commands.
+```shell
+mvn clean
+```
+```shell
+mvn install
+```
 
 ## Postman Collection
 https://api.postman.com/collections/5071296-e42d26fc-17b7-42da-b439-1efd7574912b?access_key=PMAT-01GVYGEY5GCBM8Z08JAMZBJZRN
