@@ -13,16 +13,21 @@ class DroneControllerTest {
 
     @Test
     void registerDrone() {
-        DroneRequestDto drone = new DroneRequestDto();
-        drone.setBattery(20);
-        drone.setModel("CRUISER_WEIGHT");
-        drone.setSerialNumber("dhjjj1");
-        drone.setState(State.DELIVERED.toString());
-        drone.setWeightLimit(200.00);
+        DroneRequestDto droneRequest = new DroneRequestDto();
+        droneRequest.setBattery(20);
+        droneRequest.setModel(Model.CRUISER_WEIGHT.toString());
+        droneRequest.setSerialNumber("SN-1");
+        droneRequest.setState(State.DELIVERED.toString());
+        droneRequest.setWeightLimit(200.00);
 
-        DroneResponseDto drone1 = droneController.registerDrone(drone);
+        DroneResponseDto drone = droneController.registerDrone(droneRequest);
 
-        Assertions.assertEquals(20, drone1.getBattery());
-
+        Assertions.assertEquals(20, drone.getBattery());
+        Assertions.assertEquals(Model.CRUISER_WEIGHT.toString(), drone.getModel());
+        Assertions.assertEquals("SN-1", drone.getSerialNumber());
+        Assertions.assertEquals(State.DELIVERED.toString(), drone.getState());
+        Assertions.assertEquals(200.00, drone.getWeightLimit());
     }
+
+
 }
