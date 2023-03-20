@@ -4,6 +4,7 @@ import com.musala.deliverydrones.MessageConstants;
 import com.musala.deliverydrones.drone.battery.Battery;
 import com.musala.deliverydrones.drone.battery.BatteryDto;
 import com.musala.deliverydrones.drone.battery.BatteryService;
+import com.musala.deliverydrones.exception.BadRequestException;
 import com.musala.deliverydrones.medication.Medication;
 import com.musala.deliverydrones.medication.MedicationDto;
 import com.musala.deliverydrones.medication.MedicationService;
@@ -35,8 +36,8 @@ public class DroneService {
     private final int maxBatteryPercentage = 100;
 
     public DroneResponseDto registerDrone(DroneRequestDto droneRequestDto) {
-        if(droneRequestDto.getBattery() > maxBatteryPercentage || droneRequestDto.getBattery() < minBatteryPercentage) {
-            throw new RuntimeException(MessageConstants.ErrorMessages.INVALID_BATTERY_PERCENTAGE);
+        if (droneRequestDto.getBattery() > maxBatteryPercentage || droneRequestDto.getBattery() < minBatteryPercentage) {
+            throw new BadRequestException(MessageConstants.ErrorMessages.INVALID_BATTERY_PERCENTAGE);
         }
         Drone drone = droneMapper.mapToDrone(droneRequestDto);
         Drone savedDrone = droneRepository.save(drone);
@@ -52,7 +53,7 @@ public class DroneService {
 
     @Transactional
     public Drone loadMedication(Long droneId, MedicationDto medication) {
-        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new BadRequestException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
         Medication savedMedication = medicationService.saveMedication(medication);
 
         validateMedicationLoad(drone, medication);
@@ -67,36 +68,36 @@ public class DroneService {
 
     private void validateMedicationLoad(Drone drone, MedicationDto medication) {
         if (!State.IDLE.equals(drone.getState())) {
-            throw new RuntimeException(MessageConstants.ErrorMessages.INVALID_LOADING_STATE);
+            throw new BadRequestException(MessageConstants.ErrorMessages.INVALID_LOADING_STATE);
         }
 
         if (drone.getWeightLimit() < medication.getWeight()) {
-            throw new RuntimeException(MessageConstants.ErrorMessages.WEIGHT_LIMIT_EXCEED);
+            throw new BadRequestException(MessageConstants.ErrorMessages.WEIGHT_LIMIT_EXCEED);
         }
 
         if (drone.getBattery() < minLoadableBattery) {
-            throw new RuntimeException(MessageConstants.ErrorMessages.BATTERY_LOW_FOR_LOADING);
+            throw new BadRequestException(MessageConstants.ErrorMessages.BATTERY_LOW_FOR_LOADING);
         }
     }
 
     public List<Medication> getDroneMedication(Long droneId) {
-        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new BadRequestException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
 
         return drone.getMedications();
     }
 
     public Drone getDrone(Long droneId) {
-        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new BadRequestException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
 
         return drone;
     }
 
     @Transactional
     public Battery updateBatteryInfo(Long droneId, BatteryDto batteryInfo) {
-        if(batteryInfo.getPercentage() > maxBatteryPercentage || batteryInfo.getPercentage() < minBatteryPercentage) {
-            throw new RuntimeException(MessageConstants.ErrorMessages.INVALID_BATTERY_PERCENTAGE);
+        if (batteryInfo.getPercentage() > maxBatteryPercentage || batteryInfo.getPercentage() < minBatteryPercentage) {
+            throw new BadRequestException(MessageConstants.ErrorMessages.INVALID_BATTERY_PERCENTAGE);
         }
-        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new RuntimeException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
+        Drone drone = droneRepository.findById(droneId).orElseThrow(() -> new BadRequestException(MessageConstants.ErrorMessages.DRONE_DOES_NOT_EXIST));
         Battery savedBatteryInfo = batteryService.save(batteryInfo);
 
         drone.setBattery(batteryInfo.getPercentage());
@@ -106,7 +107,7 @@ public class DroneService {
         return savedBatteryInfo;
     }
 
-    public List<Drone> getAllActiveDrones () {
+    public List<Drone> getAllActiveDrones() {
         return droneRepository.findAllByBatteryGreaterThan(minBatteryPercentage);
     }
 }
