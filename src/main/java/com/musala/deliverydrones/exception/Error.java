@@ -66,5 +66,10 @@ public class Error {
         public void setMessage(String message) {
             this.message = message;
         }
+
+        public ErrorDetail(String field, String message) {
+            this.field = field;
+            this.message = message;
+        }
     }
 }

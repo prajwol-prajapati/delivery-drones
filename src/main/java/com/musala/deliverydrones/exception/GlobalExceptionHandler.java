@@ -48,6 +48,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, ex.getStatus());
     }
 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponse> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(MessageConstants.ErrorMessages.BAD_REQUEST_ERROR);
+        java.util.List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        List<Error.ErrorDetail> collect = fieldErrors.stream()
+                                                     .map(fieldError -> new Error.ErrorDetail(fieldError.getField(),
+                                                             fieldError.getDefaultMessage()))
+                                                     .collect(Collectors.toList());
+        response.setErrors(collect);
+        response.setTimestamp(LocalDateTime.now());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<ExceptionResponse> internalServerException(InternalServerException ex) {
         ExceptionResponse response = new ExceptionResponse();
