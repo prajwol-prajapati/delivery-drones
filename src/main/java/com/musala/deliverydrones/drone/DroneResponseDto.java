@@ -9,6 +9,8 @@ import java.util.Date;
 @Getter
 @Setter
 public class DroneResponseDto {
+    private Long id;
+
     private String serialNumber;
 
     private String model;
@@ -77,5 +79,13 @@ public class DroneResponseDto {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
