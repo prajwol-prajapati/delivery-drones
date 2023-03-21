@@ -304,12 +304,4 @@ class DroneServiceTest {
 
         assertThrows(BadRequestException.class, () -> sut.getDrone(10L));
     }
-
-    @Test
-    void updateBatteryInfo() {
-    }
-
-    @Test
-    void getAllActiveDrones() {
-    }
 }
