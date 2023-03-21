@@ -1,6 +1,9 @@
 package com.musala.deliverydrones.drone;
 
 import com.musala.deliverydrones.exception.BadRequestException;
+import com.musala.deliverydrones.medication.Medication;
+import com.musala.deliverydrones.medication.MedicationDto;
+import com.musala.deliverydrones.medication.MedicationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +29,9 @@ class DroneServiceTest {
 
     @Mock
     private DroneRepository droneRepository;
+
+    @Mock
+    private MedicationService medicationService;
 
     @Test
     @DisplayName("Should Successfully Save a drone")
@@ -120,16 +126,150 @@ class DroneServiceTest {
     }
 
     @Test
+    @DisplayName("Should load valid medication")
     void loadMedication() {
+        MedicationDto medicationDto = new MedicationDto();
+        medicationDto.setName("medication-1");
+        medicationDto.setWeight(200.00);
+        medicationDto.setCode("CODE_2");
+        medicationDto.setImage("data:image/jpg;base64,SUQsasasasas909090==");
 
+        Medication medication = new Medication();
+        medication.setName("medication-1");
+        medication.setWeight(200.00);
+        medication.setCode("CODE_2");
+        medication.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Drone drone = new Drone();
+        drone.setId(100L);
+        drone.setBattery(30);
+        drone.setModel(Model.CRUISER_WEIGHT);
+        drone.setSerialNumber("SN-1");
+        drone.setState(State.IDLE);
+        drone.setWeightLimit(200.00);
+
+        when(droneRepository.findById(drone.getId())).thenReturn(java.util.Optional.of(drone));
+        when(medicationService.saveMedication(medicationDto)).thenReturn(medication);
+
+        drone.setMedications(new ArrayList<>());
+        drone.getMedications().add(medication);
+
+        when(droneRepository.save(drone)).thenReturn(drone);
+
+        Assertions.assertEquals(drone, sut.loadMedication(drone.getId(), medicationDto));
+    }
+
+    @Test
+    @DisplayName("Should throw Bad request exception while loading medication in no idle drone")
+    void shouldThrowExceptionWhileLoadingMedicationOnNonIdleDrone() {
+        MedicationDto medicationDto = new MedicationDto();
+        medicationDto.setName("medication-1");
+        medicationDto.setWeight(200.00);
+        medicationDto.setCode("CODE_2");
+        medicationDto.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Medication medication = new Medication();
+        medication.setName("medication-1");
+        medication.setWeight(200.00);
+        medication.setCode("CODE_2");
+        medication.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Drone drone = new Drone();
+        drone.setId(100L);
+        drone.setBattery(30);
+        drone.setModel(Model.CRUISER_WEIGHT);
+        drone.setSerialNumber("SN-1");
+        drone.setState(State.DELIVERED);
+        drone.setWeightLimit(200.00);
+
+        when(droneRepository.findById(drone.getId())).thenReturn(java.util.Optional.of(drone));
+
+        assertThrows(BadRequestException.class, () -> sut.loadMedication(drone.getId(), medicationDto));
+    }
+
+    @Test
+    @DisplayName("Should throw Bad request exception while loading medication weight greater than drone capacity")
+    void shouldThrowExceptionWhileLoadingMedicationWeightIsGreaterThenDroneCapacity() {
+        MedicationDto medicationDto = new MedicationDto();
+        medicationDto.setName("medication-1");
+        medicationDto.setWeight(210.00);
+        medicationDto.setCode("CODE_2");
+        medicationDto.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Medication medication = new Medication();
+        medication.setName("medication-1");
+        medication.setWeight(210.00);
+        medication.setCode("CODE_2");
+        medication.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Drone drone = new Drone();
+        drone.setId(100L);
+        drone.setBattery(30);
+        drone.setModel(Model.CRUISER_WEIGHT);
+        drone.setSerialNumber("SN-1");
+        drone.setState(State.IDLE);
+        drone.setWeightLimit(200.00);
+
+        when(droneRepository.findById(drone.getId())).thenReturn(java.util.Optional.of(drone));
+
+        assertThrows(BadRequestException.class, () -> sut.loadMedication(drone.getId(), medicationDto));
+    }
+
+    @Test
+    @DisplayName("Should throw Bad request exception while loading medication in drone with 25% battery")
+    void shouldThrowExceptionWhileLoadingMedicationWhenDroneBatteryLow() {
+        MedicationDto medicationDto = new MedicationDto();
+        medicationDto.setName("medication-1");
+        medicationDto.setWeight(200.00);
+        medicationDto.setCode("CODE_2");
+        medicationDto.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Medication medication = new Medication();
+        medication.setName("medication-1");
+        medication.setWeight(200.00);
+        medication.setCode("CODE_2");
+        medication.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Drone drone = new Drone();
+        drone.setId(100L);
+        drone.setBattery(20);
+        drone.setModel(Model.CRUISER_WEIGHT);
+        drone.setSerialNumber("SN-1");
+        drone.setState(State.IDLE);
+        drone.setWeightLimit(200.00);
+
+        when(droneRepository.findById(drone.getId())).thenReturn(java.util.Optional.of(drone));
+
+        assertThrows(BadRequestException.class, () -> sut.loadMedication(drone.getId(), medicationDto));
     }
 
     @Test
     void getDroneMedication() {
+        Medication medication = new Medication();
+        medication.setName("medication-1");
+        medication.setWeight(200.00);
+        medication.setCode("CODE_2");
+        medication.setImage("data:image/jpg;base64,SUQsasasasas909090==");
+
+        Drone drone = new Drone();
+        drone.setId(100L);
+        drone.setBattery(40);
+        drone.setModel(Model.CRUISER_WEIGHT);
+        drone.setSerialNumber("SN-1");
+        drone.setState(State.IDLE);
+        drone.setWeightLimit(200.00);
+        List<Medication> medications = new ArrayList<>();
+        medications.add(medication);
+        drone.setMedications(medications);
+
+        when(droneRepository.findById(drone.getId())).thenReturn(java.util.Optional.of(drone));
+
+        Assertions.assertEquals(medications, sut.getDroneMedication(drone.getId()));
     }
 
     @Test
     void getDrone() {
+
     }
 
     @Test
