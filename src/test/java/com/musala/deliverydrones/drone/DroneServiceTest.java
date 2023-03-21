@@ -269,7 +269,40 @@ class DroneServiceTest {
 
     @Test
     void getDrone() {
+        Medication medication = new Medication();
+        medication.setName("medication-1");
+        medication.setWeight(200.00);
+        medication.setCode("CODE_2");
+        medication.setImage("data:image/jpg;base64,SUQsasasasas909090==");
 
+        Drone drone = new Drone();
+        drone.setId(100L);
+        drone.setBattery(40);
+        drone.setModel(Model.CRUISER_WEIGHT);
+        drone.setSerialNumber("SN-1");
+        drone.setState(State.IDLE);
+        drone.setWeightLimit(200.00);
+        List<Medication> medications = new ArrayList<>();
+        medications.add(medication);
+        drone.setMedications(medications);
+
+        when(droneRepository.findById(drone.getId())).thenReturn(java.util.Optional.of(drone));
+
+        Assertions.assertEquals(drone, sut.getDrone(drone.getId()));
+    }
+
+    @Test
+    @DisplayName("Should throw bad request exception if incorrect drone id is entered while getting drone by id.")
+    void shouldThrowErrorWhenIncorrectDroneIdWhileGettingDroneById() {
+        Drone drone = new Drone();
+        drone.setId(100L);
+        drone.setBattery(40);
+        drone.setModel(Model.CRUISER_WEIGHT);
+        drone.setSerialNumber("SN-1");
+        drone.setState(State.IDLE);
+        drone.setWeightLimit(200.00);
+
+        assertThrows(BadRequestException.class, () -> sut.getDrone(10L));
     }
 
     @Test
