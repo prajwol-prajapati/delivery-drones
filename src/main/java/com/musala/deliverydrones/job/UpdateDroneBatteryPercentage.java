@@ -20,7 +20,7 @@ public class UpdateDroneBatteryPercentage {
 
     @Scheduled(fixedDelay = DRONE_BATTERY_UPDATE_MILL_SEC)
     public void updateBatteryInfo() {
-//        log.info("Drone battery auto decrement by 1");
+        log.info("Drone battery auto decrement by 1");
         List<Drone> drones = droneService.getAllActiveDrones();
 
         drones.forEach(drone -> {

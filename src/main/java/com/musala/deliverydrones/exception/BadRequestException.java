@@ -29,17 +29,5 @@ public class BadRequestException extends RuntimeException {
         super(message);
         this.message = message;
     }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public List<Error.ErrorDetail> getErrors() {
-        return errors;
-    }
 }
 

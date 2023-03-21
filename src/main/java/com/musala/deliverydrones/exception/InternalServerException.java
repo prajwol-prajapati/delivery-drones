@@ -15,12 +15,4 @@ public class InternalServerException extends RuntimeException {
 
     private HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
     private String message = MessageConstants.ErrorMessages.INTERNAL_SERVER_ERROR;
-
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> globalException(Exception ex) {
-//        log.error("Unhandled exception: ", ex);
+        log.error("Unhandled exception: ", ex);
         InternalServerException internalServerException = new InternalServerException();
         ExceptionResponse response = new ExceptionResponse();
         response.setMessage(internalServerException.getMessage());
